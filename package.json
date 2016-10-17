@@ -8,11 +8,15 @@
   "dependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
+    "csrf": "^3.0.3",
+    "csurf": "^1.9.0",
     "debug": "~2.2.0",
     "ejs": "~2.4.1",
     "express": "~4.13.4",
+    "express-validator": "^2.20.10",
     "less-middleware": "1.0.x",
     "mongodb": "^2.2.10",
+    "mongoose": "^4.6.3",
     "monk": "^3.1.2",
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.0"

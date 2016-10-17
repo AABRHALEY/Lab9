@@ -1,19 +1,27 @@
 var express = require('express');
 var path = require('path');
+var mongoose = require('mongoose');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongo = require('mongodb');
-var monk = require('monk');
+var validator = require('express-validator');
+var csrf = require('csurf');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
-//DB Config
-var db = monk('localhost:27017/testDB');
+mongoose.connect('mongodb://localhost:27017/testDB');
+
+// custom setup
+app.enable('case sensitive routing');
+app.set('x-powered-by', false);
+app.set('strict routing', true);
+app.set('trust proxy', true);
+app.enable('trust proxy');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -28,9 +36,13 @@ app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(function(req,res,next){
-    req.db = db;
-    next();
+app.use(validator());
+app.use(csrf({ cookie: true }));
+
+// assign csrf token to all template
+app.use(function(req, res, next){
+  res.locals.csrfToken = req.csrfToken();
+  next();
 });
 
 app.use('/', routes);
